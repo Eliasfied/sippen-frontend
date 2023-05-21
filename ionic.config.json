@@ -1,0 +1,7 @@
+{
+  "name": "sippen-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
