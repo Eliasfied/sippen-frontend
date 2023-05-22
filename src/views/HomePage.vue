@@ -1,56 +1,99 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blankok</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <div id="container">
-        <strong>Ready to create an app? yes</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <ion-content>
+      <div class="content">
+      <div v-if="currentQuestion && currentAnswer">
+        <div class="question">
+          <p class="text">
+          {{ showAnswer ? currentAnswer.antwortText : currentQuestion.frageText }}
+          </p>
+        </div>
+        <div class="button-container">
+          <ion-button class="next-button" @click="next">
+            Weiter
+          </ion-button>
+        </div>
       </div>
+    </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { ref, onMounted } from "vue";
+import axios from "axios";
+
+interface Frage {
+  frageText: string;
+}
+
+interface Antwort {
+  antwortText: string;
+}
+
+const fragen = ref<Frage[]>([]);
+const antworten = ref<Antwort[]>([]);
+const currentQuestion = ref<Frage | null>(null);
+const currentAnswer = ref<Antwort | null>(null);
+const showAnswer = ref(false);
+let index = ref(0);
+
+onMounted(async () => {
+  try {
+    const responseFragen = await axios.get<Frage[]>("http://localhost:8080/api/fragen");
+    const responseAntworten = await axios.get<Antwort[]>("http://localhost:8080/api/antworten");
+    fragen.value = responseFragen.data;
+    antworten.value = responseAntworten.data;
+    currentQuestion.value = fragen.value[0];
+    currentAnswer.value = antworten.value[0];
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+const next = () => {
+  if (showAnswer.value) {
+    index.value++;
+    if (index.value < fragen.value.length) {
+      currentQuestion.value = fragen.value[index.value];
+      currentAnswer.value = antworten.value[index.value];
+    }
+  }
+  showAnswer.value = !showAnswer.value;
+};
 </script>
 
 <style scoped>
-#container {
-  text-align: center;
-  
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  background-color: #4CAF50;
+  color: white;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+.question, .answer {
+  margin-bottom: 20px;
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  
-  color: #8c8c8c;
-  
-  margin: 0;
+.text {
+  font-weight: bold;
+  font-size: x-large;
 }
 
-#container a {
-  text-decoration: none;
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
+
+.next-button {
+  --background: white;
+  --color: #4CAF50;
+  margin-top: 50px; /* adjust this value as needed */
+}
+
+
 </style>
