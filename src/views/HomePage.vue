@@ -4,7 +4,7 @@
       <div class="content">
       <div v-if="currentQuestion && currentAnswer">
         <div class="question">
-          <p class="text">
+          <p class="text" :class="{'answer-text': showAnswer}">
           {{ showAnswer ? currentAnswer.antwortText : currentQuestion.frageText }}
           </p>
         </div>
@@ -44,8 +44,7 @@ onMounted(async () => {
     const responseAntworten = await axios.get<Antwort[]>("http://localhost:8080/api/antworten");
     fragen.value = responseFragen.data;
     antworten.value = responseAntworten.data;
-    currentQuestion.value = fragen.value[0];
-    currentAnswer.value = antworten.value[0];
+    selectRandomQuestionAndAnswer();
   } catch (error) {
     console.error(error);
   }
@@ -53,13 +52,15 @@ onMounted(async () => {
 
 const next = () => {
   if (showAnswer.value) {
-    index.value++;
-    if (index.value < fragen.value.length) {
-      currentQuestion.value = fragen.value[index.value];
-      currentAnswer.value = antworten.value[index.value];
-    }
+    selectRandomQuestionAndAnswer();
   }
   showAnswer.value = !showAnswer.value;
+};
+
+const selectRandomQuestionAndAnswer = () => {
+  const index = Math.floor(Math.random() * fragen.value.length);
+  currentQuestion.value = fragen.value[index];
+  currentAnswer.value = antworten.value[index];
 };
 </script>
 
@@ -76,11 +77,15 @@ const next = () => {
 
 .question, .answer {
   margin-bottom: 20px;
+  
 }
 
 .text {
   font-weight: bold;
   font-size: x-large;
+  margin-left: 5%;
+  margin-right: 5%;
+  text-align: center;
 }
 
 .button-container {
@@ -94,6 +99,10 @@ const next = () => {
   --color: #4CAF50;
   margin-top: 50px; /* adjust this value as needed */
 }
+
+.answer-text {
+    color: orange;
+  }
 
 
 </style>
