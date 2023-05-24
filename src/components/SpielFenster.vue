@@ -36,7 +36,6 @@ const antworten = ref<Antwort[]>([]);
 const currentQuestion = ref<Frage | null>(null);
 const currentAnswer = ref<Antwort | null>(null);
 const showAnswer = ref(false);
-let index = ref(0);
 
 onMounted(async () => {
   try {
