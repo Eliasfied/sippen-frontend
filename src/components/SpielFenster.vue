@@ -1,17 +1,12 @@
 <template>
   <ion-page>
     <ion-content>
-      <div class="content">
+      <div @click="next" class="content">
       <div v-if="currentQuestion && currentAnswer">
         <div class="question">
           <p class="text" :class="{'answer-text': showAnswer}">
           {{ showAnswer ? currentAnswer.antwortText : currentQuestion.frageText }}
           </p>
-        </div>
-        <div class="button-container">
-          <ion-button class="next-button" @click="next">
-            Weiter
-          </ion-button>
         </div>
       </div>
     </div>
