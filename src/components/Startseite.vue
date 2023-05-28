@@ -2,35 +2,51 @@
   <ion-page>
     <ion-content>
       <div class="page">
-        <ion-list>
-          <ion-card
-            v-for="(spieler, index) in spielerStore.players"
-            :key="index"
-          >
-            <ion-item>
-              <ion-label class="spieler-color">{{ spieler.name }}</ion-label>
-              <ion-button fill="clear" slot="end" @click="removePlayer(index)">
-                <ion-icon :icon="trashOutline" />
-              </ion-button>
-            </ion-item>
-          </ion-card>
-        </ion-list>
+        <div class="header"></div>
         <div class="footer">
-          <ion-input v-model="newPlayer" placeholder="Spieler hinzufügen" />
+          <ion-list class="card-list">
+            <ion-card
+              class="card-item"
+              v-for="(spieler, index) in spielerStore.players"
+              :key="index"
+            >
+              <ion-item>
+                <ion-label class="spieler-color">{{ spieler.name }}</ion-label>
+                <ion-button
+                  class="button-player"
+                  fill="clear"
+                  slot="end"
+                  @click="removePlayer(index)"
+                >
+                  <ion-icon :icon="trashOutline" />
+                </ion-button>
+              </ion-item>
+            </ion-card>
+          </ion-list>
 
-          <ion-button
-            @click="addPlayer"
-            :disabled="!newPlayer || spielerStore.players.length >= 10"
-          >
-            Spieler hinzufügen
-          </ion-button>
+          <ion-item class="input-item" lines="none">
+            <ion-input v-model="newPlayer" placeholder="Spieler hinzufügen" />
 
-          <ion-button
-            @click="startGame"
-            :disabled="spielerStore.players.length === 0"
-          >
-            Spiel starten
-          </ion-button>
+            <ion-button
+              class="input-button"
+              slot="end"
+              fill="clear"
+              @click="addPlayer"
+              :disabled="!newPlayer || spielerStore.players.length >= 10"
+            >
+              <ion-icon :icon="addOutline" color="white" />
+            </ion-button>
+
+            <ion-button
+              class="input-button"
+              slot="end"
+              fill="clear"
+              @click="startGame"
+              :disabled="spielerStore.players.length === 0"
+            >
+              <ion-icon :icon="playForward" color="white" />
+            </ion-button>
+          </ion-item>
         </div>
       </div>
     </ion-content>
@@ -49,7 +65,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/vue";
-import { trashOutline } from "ionicons/icons";
+import { trashOutline, addOutline, playForward } from "ionicons/icons";
 import { useSpielerStore } from "../store/SpielerStore";
 import { useRouter } from "vue-router";
 
@@ -73,55 +89,92 @@ function startGame() {
 
 <style scoped>
 .page {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #6db33f; /* grüner Hintergrund */
+  display: grid;
+  grid-template-rows: 65% 35%;
   height: 100%;
 }
 
-.footer {
+.page .header {
+  background: url("../assets/images/sippen2.png") no-repeat center center /
+    cover;
+}
+
+.page .footer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
+  background: linear-gradient(#01131f 0%, #044344 100%);
+  margin: 0;
+  padding: 3rem 0;
+}
+
+.button-player {
+  color: white;
+  font-size: 6px;
 }
 
 ion-list {
-  max-width: 500px; /* oder einen anderen gewünschten Wert */
+  width: 80%;
+  height: 80%;
+  background-color: transparent;
+}
+
+.card-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-start;
+  align-content: flex-start;
   width: 100%;
-  background-color: #6db33f;
+  height: 75%; /* make sure the container takes up all available space */
+  padding: 0;
+  margin: 0;
 }
 
-ion-card {
-  --background: white;
-  --color: #6db33f;
+.card-item {
+  flex: 0 0 auto; /* prevents the items from stretching */
+  margin-right: 10px; /* space between items */
+  margin-top: 10px; /* space between rows */
 }
 
-ion-item {
-  color: white; /* weiße Textfarbe */
+.spieler-label {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+
+.spieler-button-div {
+  height: 100%;
+  width: 100%;
+}
+
+.list-item {
+  width: 100%;
+}
+
+.input-item {
+  width: 100%;
 }
 
 .spieler-color {
-  color:#6db33f;
+  color: #e87b05;
+  font-size: 16px;
 }
 
 ion-icon {
   color: red;
 }
 
-ion-button {
-  --background: white; /* weiße Hintergrundfarbe */
-  --color: #6db33f; /* grüne Textfarbe */
-  margin-bottom: 10px;
+.input-button {
+  --background: #e87b05;
+  --color: white;
 }
 
 ion-input {
-  --background: white;
-  --color: #6db33f; /* grüner Text */
-  --placeholder-color: #6db33f; /* grüner Platzhalter */
-  margin-bottom: 10px;
+  --color: #e87b05;
+  --placeholder-color: grey;
+  text-align: center;
 }
 </style>
