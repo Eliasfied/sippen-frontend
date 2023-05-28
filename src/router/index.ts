@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import SpielFenster from "../components/SpielFenster.vue";
 import Startseite from "../components/Startseite.vue";
+import SpielFenster from '../components/SpielFenster.vue';
+import Spielende from "../components/Spielende.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -14,9 +15,14 @@ const routes: Array<RouteRecordRaw> = [
     component: Startseite
   },
   {
-    path: '/Spielfenster',
-    name: 'Spielfenster',
+    path: '/SpielFenster',
+    name: 'SpielFenster',
     component: SpielFenster
+  },
+  {
+    path: '/Spielende',
+    name: 'Spielende',
+    component: Spielende
   }
 ]
 

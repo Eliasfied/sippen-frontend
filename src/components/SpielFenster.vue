@@ -4,7 +4,11 @@
       <div @click="next" class="content">
         <div v-if="currentQuestion && currentAnswer">
           <div class="question">
-            <p class="text" :class="{ 'answer-text': showAnswer }">
+            <p
+              :key="currentQuestion.frageText"
+              class="text"
+              :class="{ 'answer-text': showAnswer }"
+            >
               <span
                 v-html="
                   showAnswer
@@ -15,6 +19,9 @@
             </p>
           </div>
         </div>
+        <div class="close-button" @click.stop="endGame">
+          <ion-icon :icon="closeOutline"></ion-icon>
+        </div>
       </div>
     </ion-content>
   </ion-page>
@@ -24,11 +31,24 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useSpielerStore } from "../store/SpielerStore";
+import { useRouter } from "vue-router";
+import { closeOutline } from "ionicons/icons";
+import {
+  IonButton,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonList,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/vue";
 
 //fragen und antworten
 interface Frage {
   frageText: string;
   kategorieId: number;
+  strafe: number;
 }
 
 interface Antwort {
@@ -43,6 +63,10 @@ const showAnswer = ref(false);
 
 //store
 const spielerStore = useSpielerStore();
+
+//router
+
+const router = useRouter();
 
 onMounted(async () => {
   try {
@@ -61,8 +85,14 @@ onMounted(async () => {
 });
 
 const next = () => {
+  if (spielerStore.counter == 30) {
+    router.push("/Spielende");
+  }
   if (showAnswer.value) {
     selectRandomQuestionAndAnswer();
+    spielerStore.counter++;
+    if (currentQuestion.value?.strafe)
+      spielerStore.sips = spielerStore.sips + currentQuestion.value?.strafe;
   }
   showAnswer.value = !showAnswer.value;
 };
@@ -105,6 +135,11 @@ const selectRandomQuestionAndAnswer = () => {
     }
   }
 };
+
+function endGame() {
+  console.log("WAS");
+  router.push("/Spielende");
+}
 </script>
 
 <style scoped>
@@ -129,6 +164,19 @@ const selectRandomQuestionAndAnswer = () => {
   margin-left: 5%;
   margin-right: 5%;
   text-align: center;
+  animation: text-in 0.3s ease-out forwards;
+}
+
+@keyframes text-in {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .button-container {
@@ -145,5 +193,18 @@ const selectRandomQuestionAndAnswer = () => {
 
 .answer-text {
   color: orange;
+}
+
+.close-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.close-button ion-icon {
+  font-size: 32px;
 }
 </style>

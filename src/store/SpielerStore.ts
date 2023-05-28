@@ -6,7 +6,9 @@ interface Player {
 
 export const useSpielerStore = defineStore('playerStore', {
   state: () => ({
-    players: [] as Player[]
+    players: [] as Player[],
+    counter: 0,
+    sips: 0,
   }),
   actions: {
     addPlayer(player: Player) {
@@ -14,6 +16,11 @@ export const useSpielerStore = defineStore('playerStore', {
     },
     removePlayer(index: number) {
       this.players.splice(index, 1);
+    },
+    resetPlayers() {
+      this.players = [];
+      this.counter = 0;
+      this.sips = 0;
     }
   }
 });
