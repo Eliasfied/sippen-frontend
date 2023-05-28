@@ -113,11 +113,11 @@ const selectRandomQuestionAndAnswer = () => {
     // html markup, spielernamen schwarz machen
     currentQuestion.value.frageText = currentQuestion.value.frageText.replace(
       "[Spieler]",
-      `<span style="color: black">${spielerStore.players[randomSpielerIndex].name}</span>`
+      `<span style="color: red">${spielerStore.players[randomSpielerIndex].name}</span>`
     );
     currentQuestion.value.frageText = currentQuestion.value.frageText.replace(
       "[Spieler1]",
-      `<span style="color: black">${spielerStore.players[randomSpielerIndex].name}</span>`
+      `<span style="color: red">${spielerStore.players[randomSpielerIndex].name}</span>`
     );
 
     // schauen dass spieler1 und spieler2 nicht gleich sind
@@ -130,7 +130,7 @@ const selectRandomQuestionAndAnswer = () => {
       }
       currentQuestion.value.frageText = currentQuestion.value.frageText.replace(
         "[Spieler2]",
-        `<span style="color: black">${spielerStore.players[randomSpielerIndex2].name}</span>`
+        `<span style="color: red">${spielerStore.players[randomSpielerIndex2].name}</span>`
       );
     }
   }
@@ -143,6 +143,12 @@ function endGame() {
 </script>
 
 <style scoped>
+
+@font-face {
+  font-family: "Comic Story";
+  src: url("../font/comic_story.ttf");
+}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -151,6 +157,8 @@ function endGame() {
   height: 100%;
   background-color: #4caf50;
   color: white;
+  background: url("../assets/images/Spielfenster.png") no-repeat center center /
+    cover;
 }
 
 .question,
@@ -165,6 +173,8 @@ function endGame() {
   margin-right: 5%;
   text-align: center;
   animation: text-in 0.3s ease-out forwards;
+  font-family: "Comic Story", sans-serif;
+
 }
 
 @keyframes text-in {
@@ -192,7 +202,7 @@ function endGame() {
 }
 
 .answer-text {
-  color: orange;
+  color: wheat;
 }
 
 .close-button {

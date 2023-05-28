@@ -10,16 +10,13 @@
               v-for="(spieler, index) in spielerStore.players"
               :key="index"
             >
-              <ion-item>
+              <ion-item class="item-player">
                 <ion-label class="spieler-color">{{ spieler.name }}</ion-label>
-                <ion-button
-                  class="button-player"
-                  fill="clear"
-                  slot="end"
+                <ion-icon
+                  class="player-icon"
+                  :icon="closeOutline"
                   @click="removePlayer(index)"
-                >
-                  <ion-icon :icon="trashOutline" />
-                </ion-button>
+                />
               </ion-item>
             </ion-card>
           </ion-list>
@@ -65,7 +62,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/vue";
-import { trashOutline, addOutline, playForward } from "ionicons/icons";
+import { closeOutline, addOutline, playForward } from "ionicons/icons";
 import { useSpielerStore } from "../store/SpielerStore";
 import { useRouter } from "vue-router";
 
@@ -88,6 +85,11 @@ function startGame() {
 </script>
 
 <style scoped>
+
+@font-face {
+  font-family: "Comic Story";
+  src: url("../font/comic_story.ttf");
+}
 .page {
   display: grid;
   grid-template-rows: 65% 35%;
@@ -95,7 +97,7 @@ function startGame() {
 }
 
 .page .header {
-  background: url("../assets/images/sippen2.png") no-repeat center center /
+  background: url("../assets/images/Startseite.png") no-repeat center center /
     cover;
 }
 
@@ -110,15 +112,24 @@ function startGame() {
   padding: 3rem 0;
 }
 
-.button-player {
-  color: white;
-  font-size: 6px;
+.player-icon {
+  font-size: 1.5rem;
+}
+
+.item-player {
+  --inner-padding-bottom: 5px;
+  --inner-padding-end: 0px;
+  --inner-padding-start: 5px;
+  --inner-padding-top: 5px;
+  --background: white;
+
 }
 
 ion-list {
   width: 80%;
   height: 80%;
   background-color: transparent;
+
 }
 
 .card-list {
@@ -131,18 +142,36 @@ ion-list {
   height: 75%; /* make sure the container takes up all available space */
   padding: 0;
   margin: 0;
+  overflow: auto;
 }
 
 .card-item {
-  flex: 0 0 auto; /* prevents the items from stretching */
-  margin-right: 10px; /* space between items */
-  margin-top: 10px; /* space between rows */
+  display: inline-flex;
+  align-items: center;
+}
+
+ion-card {
+  --background: transparent;
+  --color: white;
+  height: 20%; /* Einstellung der Höhe der ion-card */
+  padding: 0;
+}
+
+
+ion-label {
+  font-family: "Comic Story", sans-serif;
+
 }
 
 .spieler-label {
   height: 100%;
   width: 100%;
   text-align: center;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  font-family: "Comic Story", sans-serif;
+
 }
 
 .spieler-button-div {
@@ -161,10 +190,23 @@ ion-list {
 .spieler-color {
   color: #e87b05;
   font-size: 16px;
+  margin: 0;
+  padding: 0;
+  font-family: "Comic Story", sans-serif;
+
+}
+
+ion-item::part(native) {
+  padding: 5px;
+  margin: 0;
+  font-family: "Comic Story", sans-serif;
+
 }
 
 ion-icon {
-  color: red;
+  color: grey;
+  margin: 0;
+  padding: 0;
 }
 
 .input-button {
@@ -176,5 +218,7 @@ ion-input {
   --color: #e87b05;
   --placeholder-color: grey;
   text-align: center;
+  font-family: "Comic Story", sans-serif;
+
 }
 </style>
